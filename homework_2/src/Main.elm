@@ -50,9 +50,14 @@ convert03 list =
             )
             list
         )
+-- catMaybes : List (Maybe a) -> List a
+-- catMaybes = Debug.todo ""
 
+-- > catMaybes [Just 1, Nothing, Just 3]
+-- [1,3] : List number
 
-deleteMaybe xs =
+catMaybes : List (Maybe a) -> List a
+catMaybes xs =
     case xs of
         [] ->
             []
@@ -60,7 +65,51 @@ deleteMaybe xs =
         y :: ys ->
             case y of
                 Just a ->
-                    a :: deleteMaybe ys
+                    a :: catMaybes ys
 
                 Nothing ->
-                    deleteMaybe ys
+                    catMaybes ys
+
+
+
+-- Rewrite bird using <|, then using |> instead of parens (where applicable)
+-- bird : Int
+-- bird : Int
+-- bird =
+--     let
+--         notThree x =
+--             x /= 3
+--         incr x =
+--             x + 1
+--     in
+--     List.sum (List.filter notThree (List.map incr [ 1, 2, 3 ]))
+
+
+bird2 : Int
+bird2 =
+    let
+        notThree x =
+            x /= 3
+
+        incr x =
+            x + 1
+    in
+    List.sum <|
+        List.filter notThree <|
+            List.map incr <|
+                [ 1, 2, 3 ]
+
+
+bird3 : Int
+bird3 =
+    let
+        notThree x =
+            x /= 3
+
+        incr x =
+            x + 1
+    in
+    [ 1, 2, 3 ]
+        |> List.sum
+        |> List.filter notThree
+        |> List.map incr
