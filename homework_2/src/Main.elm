@@ -1,4 +1,4 @@
-module Main exposing (convert, convert03, deleteMaybe)
+module Main exposing (convert, convert03, catMaybes)
 
 -- Map one structure to another
 -- > convert [{name="John", email="john@gmail.com", phone_number="+3801234567"}]
@@ -16,18 +16,6 @@ convert list =
     List.map fun list
 
 
-
--- Filter elements with non-empty name and email
--- > convert02 [{name=Just "John", email=Just "john@gmail.com"}]
--- > [{name="John", email="john@gmail.com"}]
-
-
-convert02 :
-    List { name : Maybe String, email : Maybe String }
-    -> List { name : String, email : String }
-
-
-
 -- Fill in missing emails with <unspecified>, while removing elements with no name
 -- > convert03 [{name=Just "John", email=Nothing}]
 -- > [{name="John", email="<unspecified>"}]
@@ -37,7 +25,7 @@ convert03 :
     List { name : Maybe String, email : Maybe String }
     -> List { name : String, email : String }
 convert03 list =
-    deleteMaybe
+    catMaybes
         (List.map
             (\x ->
                 Maybe.map
@@ -110,6 +98,6 @@ bird3 =
             x + 1
     in
     [ 1, 2, 3 ]
-        |> List.sum
-        |> List.filter notThree
         |> List.map incr
+        |> List.filter notThree
+        |> List.sum
